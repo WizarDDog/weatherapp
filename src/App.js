@@ -1,28 +1,40 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 
+import { connect } from 'react-redux'
+import { updateWeather} from "./actions/weather-actions";
+
 class App extends Component {
+    constructor(props) {
+        super(props);
+
+        this.onUpdateWeather = this.onUpdateWeather.bind(this)
+    }
+
+    onUpdateWeather(event) {
+        this.props.onUpdateWeather(event.target.value);
+    }
+
+
   render() {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
+            <input onChange={this.onUpdateWeather}/>
+            {this.props.weather}
+            <div className="weather">Weather</div>
         </header>
       </div>
     );
   }
 }
+const mapStateToProps = state => ({
+    city: state.City,
+    weather: state.Weather
+});
 
-export default App;
+const mapActionToProps = {
+    onUpdateWeather: updateWeather,
+};
+
+export default connect(mapStateToProps,mapActionToProps)(App);
